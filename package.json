@@ -1,0 +1,75 @@
+{
+    "author": "Raphael Juwe <raphaeljuwe@gmail.com>",
+    "name": "Nodejs elasticsearchclient and Kafka",
+  "version": "1.4.4",
+     "description": "A client for Elastic Search communicating with Apache  Kafka",
+  
+  "main": "index.js",
+  "license": "MIT",
+  "keywords": [
+    "kafka",
+    "sasl",
+    "scram"
+  ],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tulios/kafkajs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tulios/kafkajs/issues"
+  },
+  "homepage": "https://github.com/tulios/kafkajs",
+  "scripts": {
+    "test:local": "export KAFKA_VERSION=${KAFKA_VERSION:='0.11'} && NODE_ENV=test echo \"KAFKA_VERSION: ${KAFKA_VERSION}\" && KAFKAJS_DEBUG_PROTOCOL_BUFFERS=1 ./node_modules/.bin/jest --forceExit --detectOpenHandles",
+    "test:debug": "NODE_ENV=test KAFKAJS_DEBUG_PROTOCOL_BUFFERS=1 node --inspect-brk node_modules/.bin/jest --detectOpenHandles --runInBand --watch",
+    "test:local:watch": "yarn test:local --watch",
+    "test": "yarn lint && JEST_JUNIT_OUTPUT=test-report.xml ./scripts/testWithKafka.sh 'yarn test:local --ci --maxWorkers=4 --no-watchman'",
+    "lint": "find . -path ./node_modules -prune -o -path ./coverage -prune -o -name '*.js' -print0 | xargs -0 ./node_modules/.bin/eslint",
+    "format": "find . -path ./node_modules -prune -o -path ./coverage -prune -o -name '*.js' -print0 | xargs -0 ./node_modules/.bin/prettier --write",
+    "precommit": "lint-staged",
+    "test:group:broker": "yarn test:local --testPathPattern 'src/broker/.*'",
+    "test:group:admin": "yarn test:local --testPathPattern 'src/admin/.*'",
+    "test:group:producer": "yarn test:local --testPathPattern 'src/producer/.*'",
+    "test:group:consumer": "yarn test:local --testPathPattern 'src/consumer/.*'",
+    "test:group:others": "yarn test:local --testPathPattern 'src/(?!(broker|admin|producer|consumer)/).*'",
+    "test:group:broker:ci": "JEST_JUNIT_OUTPUT=test-report.xml ./scripts/testWithKafka.sh \"yarn test:group:broker --ci --maxWorkers=4 --no-watchman\"",
+    "test:group:admin:ci": "JEST_JUNIT_OUTPUT=test-report.xml ./scripts/testWithKafka.sh \"yarn test:group:admin --ci --maxWorkers=4 --no-watchman\"",
+    "test:group:producer:ci": "JEST_JUNIT_OUTPUT=test-report.xml ./scripts/testWithKafka.sh \"yarn test:group:producer --ci --maxWorkers=4 --no-watchman\"",
+    "test:group:consumer:ci": "JEST_JUNIT_OUTPUT=test-report.xml ./scripts/testWithKafka.sh \"yarn test:group:consumer --ci --maxWorkers=4 --no-watchman\"",
+    "test:group:others:ci": "JEST_JUNIT_OUTPUT=test-report.xml ./scripts/testWithKafka.sh \"yarn test:group:others --ci --maxWorkers=4 --no-watchman\""
+  },
+  "devDependencies": {
+    "eslint": "^5.4.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-config-standard": "^12.0.0-alpha.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "execa": "^0.8.0",
+    "glob": "^7.1.2",
+    "husky": "^0.14.3",
+    "ip": "^1.1.5",
+    "jest": "^23.5.0",
+    "jest-junit": "^5.1.0",
+    "lint-staged": "^6.0.0",
+    "mockdate": "^2.0.2",
+    "prettier": "^1.14.2",
+	 "mocha": "1.7.4",
+	 "chai": "*"
+    "uuid": "^3.3.2"
+  },
+  "dependencies": {
+    "long": "^4.0.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
